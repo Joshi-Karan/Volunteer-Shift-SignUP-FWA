@@ -1,0 +1,8 @@
+/TEMP_FILE
+
+node_modules/
+data/*.db
+data/*.sqlite
+data/*.sqlite-journal
+.DS_Store
+npm-debug.log*
