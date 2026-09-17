@@ -1,6 +1,7 @@
 const path = require('node:path');
 const express = require('express');
 const { createShiftsRouter } = require('./routes/shiftsRouter');
+const { createAdminRouter } = require('./routes/adminRouter');
 
 function createApp(db) {
   const app = express();
@@ -14,6 +15,7 @@ function createApp(db) {
   });
 
   app.use('/api', createShiftsRouter(db));
+  app.use('/api/admin', createAdminRouter(db));
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
   return app;

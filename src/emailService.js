@@ -4,4 +4,10 @@ function sendConfirmationEmail({ firstName, email, shift }) {
   );
 }
 
-module.exports = { sendConfirmationEmail };
+function sendShiftCancellationEmail({ firstName, email, shift }) {
+  console.log(
+    `[EmailService] Cancellation email sent to ${email}: "${shift.task}" on ${shift.date} was cancelled`
+  );
+}
+
+module.exports = { sendConfirmationEmail, sendShiftCancellationEmail };

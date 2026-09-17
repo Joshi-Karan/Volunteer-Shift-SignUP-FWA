@@ -137,30 +137,6 @@ function createShiftsRouter(db) {
     return res.status(201).json(result);
   });
 
-  router.get('/shifts/:id/signups', (req, res) => {
-    const shiftId = Number(req.params.id);
-    if (!Number.isInteger(shiftId) || shiftId <= 0) {
-      return res.status(404).json({ error: 'SHIFT_NOT_FOUND', message: `No shift with id ${req.params.id}` });
-    }
-
-    const shift = db.prepare('SELECT shift_id, task FROM shifts WHERE shift_id = ?').get(shiftId);
-    if (!shift) {
-      return res.status(404).json({ error: 'SHIFT_NOT_FOUND', message: `No shift with id ${shiftId}` });
-    }
-
-    const signups = db
-      .prepare(
-        `SELECT s.signup_id, v.first_name, v.last_name, v.email, s.signup_date
-         FROM signups s
-         JOIN volunteers v ON v.volunteer_id = s.volunteer_id
-         WHERE s.shift_id = ?
-         ORDER BY s.signup_date`
-      )
-      .all(shiftId);
-
-    res.json({ shift_id: shift.shift_id, task: shift.task, signups });
-  });
-
   return router;
 }
 

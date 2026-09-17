@@ -46,6 +46,11 @@ function buildShiftCard(shift) {
     </form>
   `;
 
+  if (typeof window.renderAdminControls === 'function') {
+    const adminControls = window.renderAdminControls(shift);
+    if (adminControls) card.appendChild(adminControls);
+  }
+
   return card;
 }
 
