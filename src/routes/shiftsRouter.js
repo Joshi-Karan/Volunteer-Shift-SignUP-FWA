@@ -1,4 +1,5 @@
 const express = require('express');
+const { sendConfirmationEmail } = require('../emailService');
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SQLITE_CONSTRAINT_UNIQUE = 2067;
@@ -107,8 +108,8 @@ function createShiftsRouter(db) {
     const normalizedEmail = email.trim().toLowerCase();
     const shiftId = Number(shift_id);
 
-    const shiftExists = db.prepare('SELECT 1 FROM shifts WHERE shift_id = ?').get(shiftId);
-    if (!shiftExists) {
+    const shiftRow = db.prepare('SELECT task, date FROM shifts WHERE shift_id = ?').get(shiftId);
+    if (!shiftRow) {
       return res.status(404).json({ error: 'SHIFT_NOT_FOUND', message: `No shift with id ${shiftId}` });
     }
 
@@ -130,6 +131,8 @@ function createShiftsRouter(db) {
       }
       throw err;
     }
+
+    sendConfirmationEmail({ firstName, email: normalizedEmail, shift: shiftRow });
 
     return res.status(201).json(result);
   });
