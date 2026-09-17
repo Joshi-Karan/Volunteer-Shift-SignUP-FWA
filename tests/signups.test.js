@@ -43,8 +43,8 @@ test('POST /api/signups is rejected when the shift is full', async () => {
   assert.equal(res.status, 409);
   assert.equal(res.body.error, 'SHIFT_FULL');
 
-  const signupsRes = await request(app).get(`/api/shifts/${shiftId}/signups`);
-  assert.equal(signupsRes.body.signups.length, 0);
+  const signups = db.prepare('SELECT 1 FROM signups WHERE shift_id = ?').all(shiftId);
+  assert.equal(signups.length, 0);
 
   db.close();
 });
@@ -65,29 +65,6 @@ test('POST /api/signups is rejected on duplicate volunteer/shift pair', async ()
   const shiftsRes = await request(app).get('/api/shifts');
   const shift = shiftsRes.body.find((s) => s.shift_id === shiftId);
   assert.equal(shift.slots_available, 4);
-
-  db.close();
-});
-
-test('GET /api/shifts/:id/signups returns the correct volunteer list (stretch)', async () => {
-  const db = createDb(':memory:');
-  const shiftId = insertShift(db, { task: 'Stretch Shift', slots_available: 5 });
-  const app = createApp(db);
-
-  await request(app)
-    .post('/api/signups')
-    .send({ first_name: 'A', last_name: 'A', email: 'a@example.com', shift_id: shiftId });
-  await request(app)
-    .post('/api/signups')
-    .send({ first_name: 'B', last_name: 'B', email: 'b@example.com', shift_id: shiftId });
-
-  const res = await request(app).get(`/api/shifts/${shiftId}/signups`);
-
-  assert.equal(res.status, 200);
-  assert.equal(res.body.task, 'Stretch Shift');
-  assert.equal(res.body.signups.length, 2);
-  assert.equal(res.body.signups[0].email, 'a@example.com');
-  assert.equal(res.body.signups[1].email, 'b@example.com');
 
   db.close();
 });

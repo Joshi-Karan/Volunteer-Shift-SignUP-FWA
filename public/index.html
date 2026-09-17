@@ -8,12 +8,49 @@
 </head>
 <body>
   <header>
+    <div class="header-admin-bar">
+      <button id="admin-login-btn" class="admin-link-btn" type="button">Admin Login</button>
+      <span id="admin-badge" class="admin-badge hidden">Admin Mode</span>
+      <button id="admin-logout-btn" class="admin-link-btn hidden" type="button">Logout</button>
+    </div>
     <h1>Volunteer Shift Sign-Up</h1>
     <p>Browse available shifts below and sign up to help out.</p>
   </header>
-  <main id="shift-list" aria-live="polite">
-    <p class="loading">Loading shifts…</p>
+
+  <main>
+    <section id="admin-panel" class="admin-panel hidden">
+      <p id="admin-status-message" class="admin-status-message" role="status"></p>
+      <form id="admin-add-shift-form" class="admin-shift-form">
+        <h2>Add New Shift</h2>
+        <input type="text" name="task" placeholder="Task" required />
+        <input type="date" name="date" required />
+        <input type="text" name="time" placeholder="Time (e.g. 09:00-11:00)" required />
+        <input type="number" name="slots_available" placeholder="Slots" min="0" required />
+        <button type="submit">Add Shift</button>
+      </form>
+    </section>
+
+    <div id="shift-list" aria-live="polite">
+      <p class="loading">Loading shifts…</p>
+    </div>
   </main>
+
+  <div id="admin-login-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Admin Login</h2>
+      <form id="admin-login-form">
+        <input type="text" name="username" placeholder="Username" autocomplete="username" required />
+        <input type="password" name="password" placeholder="Password" autocomplete="current-password" required />
+        <p class="form-message" role="status"></p>
+        <div class="modal-actions">
+          <button type="button" id="admin-login-cancel">Cancel</button>
+          <button type="submit">Log In</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="app.js" defer></script>
+  <script src="admin.js" defer></script>
 </body>
 </html>
