@@ -1,0 +1,16 @@
+{
+  "name": "volunteer-shift-signup",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}
